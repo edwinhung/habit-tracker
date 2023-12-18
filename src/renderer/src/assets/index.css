@@ -4,7 +4,6 @@ body {
 }
 
 .container {
-  border: 1px solid black;
   position:relative;
   width: 550px;
   margin: 40px auto;
@@ -21,12 +20,47 @@ body {
     sans-serif;
 }
 
+.input {
+  position: relative;
+  top: -4px;
+  width: 300px;
+  height: 30px;
+  font-size: 18px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#add-box {
+  text-align: center;
+  
+}
+
+.plus {
+  padding: 0;
+  margin: 5px;
+  width: 30px;
+  height: 30px;
+  font-weight: bold;
+  font-size: 30px;
+  border: none;
+  background-color: white;
+  color: blue;
+  cursor: pointer;
+}
+
+.plus:hover {
+  background-color: #e0e0e0;
+}
+
 .date {
   font-size: 40px;
 }
 
 .item {
-  font-size: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 30px;
 }
 
 ul {
@@ -35,9 +69,21 @@ ul {
 }
 
 li {
-  margin-bottom: 10px;
+  margin: auto;
 }
 
 .checkbox {
-  margin-right: 5px;
+  margin: 10px;
+}
+
+.completed {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 100%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
 }

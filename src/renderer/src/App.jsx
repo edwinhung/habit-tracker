@@ -5,6 +5,8 @@ function App() {
   const [newItem, setNewItem] = useState('')
   const [itemId, setItemId] = useState(0)
   const [todoList, setTodoList] = useState([])
+  const [completedList, setCompletedList] = useState([])
+  const [displayCompleted, setDisplayCompleted] = useState(false)
   const today = new Date()
 
   const handleAdd = () => {
@@ -16,28 +18,55 @@ function App() {
     setItemId(itemId + 1)
   }
 
-  const handleClick = (event) => {
+  const handleInput = (event) => {
     setNewItem(event.target.value)
+  }
+
+  const handleClickCheck = (event, item) => {
+    if (event.target.checked) {
+      setCompletedList(completedList.concat(item))
+      setTodoList(todoList.filter((e) => e.id !== item.id))
+    } else {
+      setTodoList(todoList.concat(item))
+      setCompletedList(completedList.filter((e) => e.id != item.id))
+    }
+  }
+
+  const handleDisplayCompleted = () => {
+    setDisplayCompleted(!displayCompleted)
   }
 
   return (
     <div className="container">
       <div className="date">Today is {today.toDateString()}</div>
-      <div className="add">
-        <input type="text" onChange={handleClick} />
-        <button onClick={handleAdd}>Add</button>
+      <div id="add-box">
+        <button className="plus" onClick={handleAdd}>+</button>
+        <input
+          className="input"
+          type="text"
+          onChange={handleInput}
+          placeholder="Add a task and press plus sign"
+        />
       </div>
-      <List todoList={todoList} />
+      <List list={todoList} onClickCheck={handleClickCheck} checked={false} />
+      <div>
+        <button className="completed" onClick={handleDisplayCompleted}>
+          Completed
+        </button>
+        {displayCompleted &&
+          <List list={completedList} onClickCheck={handleClickCheck} checked={true} />
+        }
+      </div>
     </div>
   )
 }
 
-function List({ todoList }) {
+function List({ list, onClickCheck, checked }) {
   return (
     <div className="list">
       <ul>
-        {todoList.map((item) => (
-          <Item key={item.id} task={item.value} />
+        {list.map((item) => (
+          <Item key={item.id} item={item} onClickCheck={onClickCheck} checked={checked} />
         ))}
       </ul>
     </div>
@@ -45,20 +74,29 @@ function List({ todoList }) {
 }
 
 List.propTypes = {
-  todoList: PropTypes.array
+  list: PropTypes.array,
+  onClickCheck: PropTypes.func,
+  checked: PropTypes.bool
 }
 
-function Item({ task }) {
+function Item({ item, onClickCheck, checked }) {
   return (
     <li className="item">
-      <input type="checkbox" className="checkbox" />
-      <label>{task}</label>
+      <input
+        type="checkbox"
+        className="checkbox"
+        onClick={(event) => onClickCheck(event, item)}
+        checked={checked}
+      />
+      <label>{item.value}</label>
     </li>
   )
 }
 
 Item.propTypes = {
-  task: PropTypes.string.isRequired
+  item: PropTypes.object.isRequired,
+  onClickCheck: PropTypes.func,
+  checked: PropTypes.bool
 }
 
 export default App
