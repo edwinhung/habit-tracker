@@ -1,12 +1,19 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types'
 
 function App() {
-  const [newItem, setNewItem] = useState('');
+  const [newItem, setNewItem] = useState('')
+  const [itemId, setItemId] = useState(0)
   const [todoList, setTodoList] = useState([])
   const today = new Date()
 
   const handleAdd = () => {
-    setTodoList(todoList.concat(newItem))
+    const newObj = {
+      id: itemId,
+      value: newItem
+    }
+    setTodoList(todoList.concat(newObj))
+    setItemId(itemId + 1)
   }
 
   const handleClick = (event) => {
@@ -20,18 +27,38 @@ function App() {
         <input type="text" onChange={handleClick} />
         <button onClick={handleAdd}>Add</button>
       </div>
-      <div className="list">
-        <ul>
-          {todoList.map((item) => (
-            <li key={item} className="item">
-              <input type="checkbox" className="checkbox" />
-              <label>{item}</label>
-            </li>
-          ))}
-        </ul>
-      </div>
+      <List todoList={todoList} />
     </div>
   )
+}
+
+function List({ todoList }) {
+  return (
+    <div className="list">
+      <ul>
+        {todoList.map((item) => (
+          <Item key={item.id} task={item.value} />
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+List.propTypes = {
+  todoList: PropTypes.array
+}
+
+function Item({ task }) {
+  return (
+    <li className="item">
+      <input type="checkbox" className="checkbox" />
+      <label>{task}</label>
+    </li>
+  )
+}
+
+Item.propTypes = {
+  task: PropTypes.string.isRequired
 }
 
 export default App
