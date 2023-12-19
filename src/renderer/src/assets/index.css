@@ -60,7 +60,6 @@ body {
 .item {
   border: 1px solid #ccc;
   padding: 10px;
-  font-size: 30px;
 }
 
 ul {
@@ -72,8 +71,17 @@ li {
   margin: auto;
 }
 
+.checklabel {
+  font-size: 25px;
+  margin: 5px;
+}
+
 .checkbox {
-  margin: 10px;
+  margin: 5px;
+  margin-right: 10px;
+  accent-color: #0AAB05;
+  width: 20px;
+  height: 20px;
 }
 
 .completed {
@@ -85,5 +93,4 @@ li {
   text-align: left;
   border: none;
   outline: none;
-  transition: 0.4s;
 }

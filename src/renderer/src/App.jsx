@@ -45,18 +45,20 @@ function App() {
           className="input"
           type="text"
           onChange={handleInput}
-          placeholder="Add a task and press plus sign"
+          placeholder="Add a task or habit"
         />
       </div>
       <List list={todoList} onClickCheck={handleClickCheck} checked={false} />
-      <div>
-        <button className="completed" onClick={handleDisplayCompleted}>
-          Completed
-        </button>
-        {displayCompleted &&
-          <List list={completedList} onClickCheck={handleClickCheck} checked={true} />
-        }
-      </div>
+      {completedList.length > 0 &&
+        <div>
+          <button className="completed" onClick={handleDisplayCompleted}>
+            Completed
+          </button>
+          {displayCompleted &&
+            <List list={completedList} onClickCheck={handleClickCheck} checked={true} />
+          }
+        </div>
+      }
     </div>
   )
 }
@@ -82,13 +84,15 @@ List.propTypes = {
 function Item({ item, onClickCheck, checked }) {
   return (
     <li className="item">
-      <input
-        type="checkbox"
-        className="checkbox"
-        onClick={(event) => onClickCheck(event, item)}
-        checked={checked}
-      />
-      <label>{item.value}</label>
+      <label className="checklabel">
+        <input
+          type="checkbox"
+          className="checkbox"
+          onClick={(event) => onClickCheck(event, item)}
+          checked={checked}
+        />
+        {item.value}
+      </label>
     </li>
   )
 }
