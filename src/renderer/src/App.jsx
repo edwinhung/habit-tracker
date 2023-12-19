@@ -44,6 +44,7 @@ function App() {
         <input
           className="input"
           type="text"
+          value={newItem}
           onChange={handleInput}
           placeholder="Add a task or habit"
         />
