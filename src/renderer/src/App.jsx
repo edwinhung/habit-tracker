@@ -2,34 +2,35 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 function App() {
-  const [newItem, setNewItem] = useState('')
+  const [newInput, setNewInput] = useState('')
   const [itemId, setItemId] = useState(0)
   const [todoList, setTodoList] = useState([])
-  const [completedList, setCompletedList] = useState([])
   const [displayCompleted, setDisplayCompleted] = useState(false)
   const today = new Date()
 
   const handleAdd = () => {
     const newObj = {
       id: itemId,
-      value: newItem
+      value: newInput,
+      completed: false
     }
     setTodoList(todoList.concat(newObj))
     setItemId(itemId + 1)
   }
 
   const handleInput = (event) => {
-    setNewItem(event.target.value)
+    setNewInput(event.target.value)
   }
 
   const handleClickCheck = (event, item) => {
-    if (event.target.checked) {
-      setCompletedList(completedList.concat(item))
-      setTodoList(todoList.filter((e) => e.id !== item.id))
-    } else {
-      setTodoList(todoList.concat(item))
-      setCompletedList(completedList.filter((e) => e.id != item.id))
-    }
+    let listCopy = [...todoList]
+    listCopy.forEach((e) => {
+      if (e.id === item.id) {
+        console.log(event.target.checked)
+        e.completed = event.target.checked
+      }
+    })
+    setTodoList(listCopy)
   }
 
   const handleDisplayCompleted = () => {
@@ -44,19 +45,27 @@ function App() {
         <input
           className="input"
           type="text"
-          value={newItem}
+          value={newInput}
           onChange={handleInput}
           placeholder="Add a task or habit"
         />
       </div>
-      <List list={todoList} onClickCheck={handleClickCheck} checked={false} />
-      {completedList.length > 0 &&
+      <List
+        list={todoList.filter((item) => item.completed == false)}
+        onClickCheck={handleClickCheck}
+        checked={false}
+      />
+      {todoList.filter((item) => item.completed == true).length > 0 &&
         <div>
           <button className="completed" onClick={handleDisplayCompleted}>
             Completed
           </button>
           {displayCompleted &&
-            <List list={completedList} onClickCheck={handleClickCheck} checked={true} />
+            <List
+              list={todoList.filter((item) => item.completed == true)}
+              onClickCheck={handleClickCheck}
+              checked={true}
+            />
           }
         </div>
       }
