@@ -26,7 +26,6 @@ function App() {
     let listCopy = [...todoList]
     listCopy.forEach((e) => {
       if (e.id === item.id) {
-        console.log(event.target.checked)
         e.completed = event.target.checked
       }
     })
@@ -99,7 +98,7 @@ function Item({ item, onClickCheck, checked }) {
           type="checkbox"
           className="checkbox"
           onClick={(event) => onClickCheck(event, item)}
-          checked={checked}
+          defaultChecked={checked}
         />
         {item.value}
       </label>
