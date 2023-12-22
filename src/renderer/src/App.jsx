@@ -1,21 +1,21 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { v4 as uuidv4 } from 'uuid'
 
 function App() {
   const [newInput, setNewInput] = useState('')
-  const [itemId, setItemId] = useState(0)
   const [todoList, setTodoList] = useState([])
   const [displayCompleted, setDisplayCompleted] = useState(false)
   const today = new Date()
 
   const handleAdd = () => {
     const newObj = {
-      id: itemId,
+      id: uuidv4(),
       value: newInput,
       completed: false
     }
     setTodoList(todoList.concat(newObj))
-    setItemId(itemId + 1)
+    setNewInput('')
   }
 
   const handleInput = (event) => {
