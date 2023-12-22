@@ -58,6 +58,7 @@ body {
 }
 
 .item {
+  position: relative;
   border: 1px solid #ccc;
   padding: 10px;
 }
@@ -93,4 +94,19 @@ li {
   text-align: left;
   border: none;
   outline: none;
+}
+
+.delete {
+  position: absolute;
+  padding: 0;
+  top: 0;
+  right: 0;
+  font-size: 12px;
+  height: 20px;
+  width: 20px;
+  border-radius: 30%;
+  border-color: #e0e0e0;
+  box-shadow: none;
+  background-color: transparent;
+  color: red;
 }

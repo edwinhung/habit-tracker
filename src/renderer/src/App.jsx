@@ -22,10 +22,10 @@ function App() {
     setNewInput(event.target.value)
   }
 
-  const handleClickCheck = (event, item) => {
+  const handleClickCheck = (event, id) => {
     let listCopy = [...todoList]
     listCopy.forEach((e) => {
-      if (e.id === item.id) {
+      if (e.id === id) {
         e.completed = event.target.checked
       }
     })
@@ -34,6 +34,10 @@ function App() {
 
   const handleDisplayCompleted = () => {
     setDisplayCompleted(!displayCompleted)
+  }
+
+  const handleDelete = (id) => {
+    setTodoList(todoList.filter((item) => item.id !== id))
   }
 
   return (
@@ -52,6 +56,7 @@ function App() {
       <List
         list={todoList.filter((item) => item.completed == false)}
         onClickCheck={handleClickCheck}
+        onClickDelete={handleDelete}
         checked={false}
       />
       {todoList.filter((item) => item.completed == true).length > 0 &&
@@ -63,6 +68,7 @@ function App() {
             <List
               list={todoList.filter((item) => item.completed == true)}
               onClickCheck={handleClickCheck}
+              onClickDelete={handleDelete}
               checked={true}
             />
           }
@@ -72,12 +78,18 @@ function App() {
   )
 }
 
-function List({ list, onClickCheck, checked }) {
+function List({ list, onClickCheck, onClickDelete, checked }) {
   return (
     <div className="list">
       <ul>
         {list.map((item) => (
-          <Item key={item.id} item={item} onClickCheck={onClickCheck} checked={checked} />
+          <Item
+            key={item.id}
+            item={item}
+            onClickCheck={onClickCheck}
+            onClickDelete={onClickDelete}
+            checked={checked}
+          />
         ))}
       </ul>
     </div>
@@ -87,21 +99,23 @@ function List({ list, onClickCheck, checked }) {
 List.propTypes = {
   list: PropTypes.array,
   onClickCheck: PropTypes.func,
+  onClickDelete: PropTypes.func,
   checked: PropTypes.bool
 }
 
-function Item({ item, onClickCheck, checked }) {
+function Item({ item, onClickCheck, onClickDelete, checked }) {
   return (
     <li className="item">
       <label className="checklabel">
         <input
           type="checkbox"
           className="checkbox"
-          onClick={(event) => onClickCheck(event, item)}
+          onClick={(event) => onClickCheck(event, item.id)}
           defaultChecked={checked}
         />
         {item.value}
       </label>
+      <button className="delete" onClick={() => onClickDelete(item.id)}>X</button>
     </li>
   )
 }
@@ -109,6 +123,7 @@ function Item({ item, onClickCheck, checked }) {
 Item.propTypes = {
   item: PropTypes.object.isRequired,
   onClickCheck: PropTypes.func,
+  onClickDelete: PropTypes.func,
   checked: PropTypes.bool
 }
 
