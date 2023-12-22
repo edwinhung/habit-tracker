@@ -9,6 +9,7 @@ function App() {
   const today = new Date()
 
   const handleAdd = () => {
+    if (!newInput) return;
     const newObj = {
       id: uuidv4(),
       value: newInput,
@@ -23,13 +24,17 @@ function App() {
   }
 
   const handleClickCheck = (event, id) => {
-    let listCopy = [...todoList]
-    listCopy.forEach((e) => {
-      if (e.id === id) {
-        e.completed = event.target.checked
+    const newList = todoList.map((item) => {
+      if (item.id === id) {
+        const updatedItem = {
+          ...item,
+          completed: event.target.checked
+        }
+        return updatedItem
       }
+      return item
     })
-    setTodoList(listCopy)
+    setTodoList(newList)
   }
 
   const handleDisplayCompleted = () => {

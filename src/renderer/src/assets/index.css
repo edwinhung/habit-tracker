@@ -109,4 +109,10 @@ li {
   box-shadow: none;
   background-color: transparent;
   color: red;
+  cursor: pointer;
 }
+
+.delete:hover {
+  border-color: #646cff;
+}
+
