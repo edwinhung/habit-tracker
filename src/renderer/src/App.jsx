@@ -1,48 +1,110 @@
-import { useState } from 'react'
+import { useReducer } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from 'uuid'
 
+const ADD_ITEM = 'ADD_ITEM'
+const UPDATE_INPUT = 'UPDATE_INPUT'
+const CLICK_CHECK = 'CLICK_CHECK'
+const DISPLAY_COMPLETED = 'DISPLAY_COMPLETED'
+const DELETE_ITEM = 'DELETE_ITEM'
+
+const todoListReducer = (state, action) => {
+  switch (action.type) {
+    case ADD_ITEM: {
+      if (!state.input) return state
+      const newObj = {
+        id: uuidv4(),
+        value: state.input,
+        completed: false
+      }
+      return {
+        ...state,
+        todoList: state.todoList.concat(newObj),
+        input: ''
+      }
+    }
+    case UPDATE_INPUT: {
+      return {
+        ...state,
+        input: action.payload.input
+      }
+    }
+    case CLICK_CHECK: {
+      const newList = state.todoList.map((item) => {
+        if (item.id === action.payload.id) {
+          const updatedItem = {
+            ...item,
+            completed: action.payload.checked
+          }
+          return updatedItem
+        }
+        return item
+      })
+      return {
+        ...state,
+        todoList: newList
+      }
+    }
+    case DISPLAY_COMPLETED: {
+      return {
+        ...state,
+        displayCompleted: !state.displayCompleted
+      }
+    }
+    case DELETE_ITEM: {
+      return {
+        ...state,
+        todoList: state.todoList.filter((item) => item.id !== action.payload.id)
+      }
+    }
+  }
+}
+
 function App() {
-  const [newInput, setNewInput] = useState('')
-  const [todoList, setTodoList] = useState([])
-  const [displayCompleted, setDisplayCompleted] = useState(false)
+  const [list, dispatchTodoList] = useReducer(todoListReducer, {
+    input: '',
+    todoList: [],
+    displayCompleted: false
+  })
+  // const [newInput, setNewInput] = useState('')
+  // const [todoList, setTodoList] = useState([])
+  // const [displayCompleted, setDisplayCompleted] = useState(false)
   const today = new Date()
 
   const handleAdd = () => {
-    if (!newInput) return;
-    const newObj = {
-      id: uuidv4(),
-      value: newInput,
-      completed: false
-    }
-    setTodoList(todoList.concat(newObj))
-    setNewInput('')
+    dispatchTodoList({
+      type: ADD_ITEM
+    })
   }
-
+  
   const handleInput = (event) => {
-    setNewInput(event.target.value)
+    dispatchTodoList({
+      type: UPDATE_INPUT,
+      payload: { input: event.target.value }
+    })
   }
 
   const handleClickCheck = (event, id) => {
-    const newList = todoList.map((item) => {
-      if (item.id === id) {
-        const updatedItem = {
-          ...item,
-          completed: event.target.checked
-        }
-        return updatedItem
+    dispatchTodoList({
+      type: CLICK_CHECK,
+      payload: {
+        id: id,
+        checked: event.target.checked
       }
-      return item
     })
-    setTodoList(newList)
   }
 
   const handleDisplayCompleted = () => {
-    setDisplayCompleted(!displayCompleted)
+    dispatchTodoList({
+      type: DISPLAY_COMPLETED
+    })
   }
 
   const handleDelete = (id) => {
-    setTodoList(todoList.filter((item) => item.id !== id))
+    dispatchTodoList({
+      type: DELETE_ITEM,
+      payload: { id: id }
+    })
   }
 
   return (
@@ -53,25 +115,25 @@ function App() {
         <input
           className="input"
           type="text"
-          value={newInput}
+          value={list.input}
           onChange={handleInput}
           placeholder="Add a task or habit"
         />
       </div>
       <List
-        list={todoList.filter((item) => item.completed == false)}
+        list={list.todoList.filter((item) => item.completed == false)}
         onClickCheck={handleClickCheck}
         onClickDelete={handleDelete}
         checked={false}
       />
-      {todoList.filter((item) => item.completed == true).length > 0 &&
+      {list.todoList.filter((item) => item.completed == true).length > 0 &&
         <div>
           <button className="completed" onClick={handleDisplayCompleted}>
             Completed
           </button>
-          {displayCompleted &&
+          {list.displayCompleted &&
             <List
-              list={todoList.filter((item) => item.completed == true)}
+              list={list.todoList.filter((item) => item.completed == true)}
               onClickCheck={handleClickCheck}
               onClickDelete={handleDelete}
               checked={true}
