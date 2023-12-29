@@ -7,6 +7,13 @@ const UPDATE_INPUT = 'UPDATE_INPUT'
 const CLICK_CHECK = 'CLICK_CHECK'
 const DISPLAY_COMPLETED = 'DISPLAY_COMPLETED'
 const DELETE_ITEM = 'DELETE_ITEM'
+const RESET = 'RESET'
+
+const initialState = {
+  input: '',
+  todoList: [],
+  displayCompleted: false
+}
 
 const todoListReducer = (state, action) => {
   switch (action.type) {
@@ -57,15 +64,14 @@ const todoListReducer = (state, action) => {
         todoList: state.todoList.filter((item) => item.id !== action.payload.id)
       }
     }
+    case RESET: {
+      return initialState
+    }
   }
 }
 
 function App() {
-  const [list, dispatchTodoList] = useReducer(todoListReducer, {
-    input: '',
-    todoList: [],
-    displayCompleted: false
-  })
+  const [list, dispatchTodoList] = useReducer(todoListReducer, initialState)
   // const [newInput, setNewInput] = useState('')
   // const [todoList, setTodoList] = useState([])
   // const [displayCompleted, setDisplayCompleted] = useState(false)
@@ -107,6 +113,10 @@ function App() {
     })
   }
 
+  const handleReset = () => {
+    dispatchTodoList({type: RESET})
+  }
+
   return (
     <div className="container">
       <div className="date">Today is {today.toDateString()}</div>
@@ -119,7 +129,9 @@ function App() {
           onChange={handleInput}
           placeholder="Add a task or habit"
         />
+        <button className="reset" onClick={handleReset}>Reset</button>
       </div>
+      <hr />
       <List
         list={list.todoList.filter((item) => item.completed == false)}
         onClickCheck={handleClickCheck}

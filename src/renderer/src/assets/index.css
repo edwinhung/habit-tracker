@@ -116,3 +116,16 @@ li {
   border-color: #646cff;
 }
 
+.reset {
+  position: relative;
+  top: -2px;
+  margin: 17px;
+  font-size: 22px;
+  border-radius: 10%;
+  background-color: white;
+  border-color: #ccc;
+}
+
+.reset:hover {
+  background-color: #ccc;
+}
