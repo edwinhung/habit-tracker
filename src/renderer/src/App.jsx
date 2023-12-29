@@ -1,4 +1,4 @@
-import { useReducer } from 'react'
+import { useReducer, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -8,6 +8,7 @@ const CLICK_CHECK = 'CLICK_CHECK'
 const DISPLAY_COMPLETED = 'DISPLAY_COMPLETED'
 const DELETE_ITEM = 'DELETE_ITEM'
 const RESET = 'RESET'
+const LIST_KEY = 'list'
 
 const initialState = {
   input: '',
@@ -71,7 +72,10 @@ const todoListReducer = (state, action) => {
 }
 
 function App() {
-  const [list, dispatchTodoList] = useReducer(todoListReducer, initialState)
+  const [list, dispatchTodoList] = useReducer(
+    todoListReducer,
+    JSON.parse(localStorage.getItem(LIST_KEY)) || initialState
+  )
   // const [newInput, setNewInput] = useState('')
   // const [todoList, setTodoList] = useState([])
   // const [displayCompleted, setDisplayCompleted] = useState(false)
@@ -114,8 +118,12 @@ function App() {
   }
 
   const handleReset = () => {
-    dispatchTodoList({type: RESET})
+    dispatchTodoList({ type: RESET })
   }
+
+  useEffect(() => {
+    localStorage.setItem(LIST_KEY, JSON.stringify(list))
+  }, [list])
 
   return (
     <div className="container">
