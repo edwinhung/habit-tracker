@@ -76,9 +76,6 @@ function App() {
     todoListReducer,
     JSON.parse(localStorage.getItem(LIST_KEY)) || initialState
   )
-  // const [newInput, setNewInput] = useState('')
-  // const [todoList, setTodoList] = useState([])
-  // const [displayCompleted, setDisplayCompleted] = useState(false)
   const today = new Date()
 
   const handleAdd = () => {
@@ -121,6 +118,12 @@ function App() {
     dispatchTodoList({ type: RESET })
   }
 
+  const handleKeyPressed = (event) => {
+    if (event.key === 'Enter') {
+      handleAdd()
+    }
+  }
+
   useEffect(() => {
     localStorage.setItem(LIST_KEY, JSON.stringify(list))
   }, [list])
@@ -135,6 +138,7 @@ function App() {
           type="text"
           value={list.input}
           onChange={handleInput}
+          onKeyDown={(event) => handleKeyPressed(event)}
           placeholder="Add a task or habit"
         />
         <button className="reset" onClick={handleReset}>Reset</button>
