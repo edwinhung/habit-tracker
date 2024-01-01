@@ -1,9 +1,10 @@
 # Todo List
 A simple todo list app built on Electron and React to run on Windows
 
-![todo_list](resources/screenshot.png)
+![todo_list](resources/Screenshot.png)
 
 ## Download
+Get the latest app on Windows from [Releases](https://github.com/edwinhung/todo-list/releases).
 
 ## Development
 
