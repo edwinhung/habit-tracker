@@ -153,7 +153,7 @@ function App() {
       {list.todoList.filter((item) => item.completed == true).length > 0 &&
         <div>
           <button className="completed" onClick={handleDisplayCompleted}>
-            Completed
+            <span className={`caret ${list.displayCompleted ? 'rotate' : ''}`}>{'>'}</span>Completed
           </button>
           {list.displayCompleted &&
             <List
